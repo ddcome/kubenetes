@@ -25,7 +25,7 @@ spec:
 
 ## 网络策略实例
 
-### denyall
+### denyall有效
 ```
 [*** ~]$ kubectl get networkpolicy np-denyall-zhongyaozhiji -n zhongyaozhiji -o yaml
 apiVersion: extensions/v1beta1
@@ -42,6 +42,25 @@ spec:
   podSelector: {}
   policyTypes:
   - Ingress
+```
+  对比
+```
+[*** ~]# kubectl get networkpolicy test001-denyall -n test001 -o yaml
+apiVersion: extensions/v1beta1
+kind: NetworkPolicy
+metadata:
+  creationTimestamp: 2018-03-29T03:21:56Z
+  generation: 1
+  name: test001-denyall
+  namespace: test001
+  resourceVersion: "1135824"
+  selfLink: /apis/extensions/v1beta1/namespaces/test001/networkpolicies/test001-denyall
+  uid: 55713168-3300-11e8-9b8a-000c299b4f90
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+
 ```
 
 ### allowself
@@ -67,8 +86,32 @@ spec:
   policyTypes:
   - Ingress
 ```
+  对比
+```
+[*** ~]# kubectl get networkpolicy test001-allowself -n test001 -o yaml
+apiVersion: extensions/v1beta1
+kind: NetworkPolicy
+metadata:
+  creationTimestamp: 2018-03-29T03:21:56Z
+  generation: 1
+  name: test001-allowself
+  namespace: test001
+  resourceVersion: "1135825"
+  selfLink: /apis/extensions/v1beta1/namespaces/test001/networkpolicies/test001-allowself
+  uid: 557afb9c-3300-11e8-9b8a-000c299b4f90
+spec:
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          namespace: test001
+  podSelector: {}
+  policyTypes:
+  - Ingress
 
-### allowsomeone
+```
+
+### allow extraip someone
 ```
 [*** ~]$ kubectl get networkpolicy allow-extra-ip-zhongyaozhijiextra-ip-default -n zhongyaozhiji -o yaml
 apiVersion: extensions/v1beta1
